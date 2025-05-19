@@ -15,7 +15,7 @@
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
-
+# endif
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -27,8 +27,6 @@ char	*ft_strjoin(char *s1, char *s2, int size);
 int		ft_strchr(char *str, char c, int size);
 int		ft_strlen(char *str);
 void	*ft_calloc(size_t elem, size_t size);
-
-# endif
 
 #endif
 

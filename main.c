@@ -4,12 +4,12 @@
 
 int main()
 {
-	int fd = 0;
-
-	fd = open("file.txt" , O_RDONLY);
+	int fd = open("file.txt" , O_RDONLY);
 	char *str = get_next_line(fd);
-	printf("%s", str);
-	str = get_next_line(fd);
-	printf("%s", str);
+	while (str != NULL)
+	{
+		str = get_next_line(fd);
+		printf("%s", str);
+	}
 	close(fd);
 }

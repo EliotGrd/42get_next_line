@@ -16,10 +16,10 @@
 char	*init_line(char *line, char *buffer, int contain_eol)
 {
 	int	i;
-	int	start;
+	int	add_from;
 
 	i = 0;
-	start = 0;
+	add_from = 0;
 	if (contain_eol == 0)
 		return (ft_strdup(""));
 	else
@@ -27,58 +27,78 @@ char	*init_line(char *line, char *buffer, int contain_eol)
 		
 		while (buffer[i] != '\n')
 			i++;
-		start = BUFFER_SIZE - i;
+		add_from = BUFFER_SIZE - i - 2;
 		i = 0;
-		line = ft_calloc(sizeof(char), BUFFER_SIZE - start);
-		while (start < BUFFER_SIZE)
+		line = ft_calloc(sizeof(char), add_from + 1);
+		while (add_from < BUFFER_SIZE)
 		{
-			line[i] = buffer[start];
-			start++;
+			line[i] = buffer[add_from];
+			add_from++;
 			i++;
 		}
 		return (line);
 	}
 }
 
-char	*read_fd(int fd, char *buffer)
+char	*end_line(char *line, char *buffer)
 {
-	//char	*ret_str;
-	int		nb_read;
+	int	i;
 
-	nb_read = read(fd, buffer, BUFFER_SIZE);
-	if (nb_read < BUFFER_SIZE)
-		printf("end");
-	return (buffer);
+	i = 0;
+	while(i < BUFFER_SIZE && buffer[i] && buffer[i] != '\n')
+		i++;
+	return (line);
+}
+
+char	*get_line(int fd, char *buffer)
+{
+	char	*line_tmp;
+	int		nb_read;
+	int		contain_eol;
+
+	line_tmp = NULL;
+	contain_eol = 0;
+	if (ft_strchr(buffer, '\n', BUFFER_SIZE) == 1)
+		contain_eol = 1;
+	line_tmp = init_line(line_tmp , buffer, contain_eol);
+	nb_read = 1;
+	while (nb_read > 0 && !ft_strchr(buffer, '\n', BUFFER_SIZE))
+	{
+		nb_read = read(fd, buffer, BUFFER_SIZE);
+		if (nb_read < 0)
+		{
+			free(buffer);
+			free(line_tmp);
+			return (NULL);
+		}
+		if (!ft_strchr(buffer, '\n', nb_read))
+			line_tmp = ft_strjoin(line_tmp, buffer, nb_read);
+		else
+			line_tmp = end_line(line_tmp, buffer);
+	}
+	return (line_tmp);
 }
 
 char	*get_next_line(int fd)
 {
-	int			contain_eol;
-	int			i;
 	char		*line;
 	static char	*buffer;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	i = 0;
-	contain_eol = 0;
 	line = NULL;
-	buffer = ft_calloc(sizeof(char), BUFFER_SIZE);
 	if (!buffer)
-		return (NULL);
-	if (ft_strchr(buffer, '\n', BUFFER_SIZE) == 1)
-		contain_eol = 1;
-	line = init_line(line , buffer, contain_eol);
-	while (ft_strchr(buffer, '\n', BUFFER_SIZE) == 0)
 	{
-		buffer = read_fd(fd, buffer);
-		if (ft_strchr(buffer, '\n', BUFFER_SIZE) == 0)
-			line = ft_strjoin(line, buffer, BUFFER_SIZE);
+		buffer = ft_calloc(sizeof(char), BUFFER_SIZE);
+		if (!buffer)
+			return (NULL);
 	}
-	while (buffer[i] != '\n' && buffer[i])
-		i++;
-	line = ft_strjoin(line, buffer, i + 1);
-	//if (ft_strchr(line, '\n', ft_strlen(line)))
+	line = get_line(fd, buffer);
+	if (!line)
+	{
+		printf("\nerrorline");
+		return (NULL);
+	}
 	return (line);
 }
 
