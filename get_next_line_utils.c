@@ -6,7 +6,7 @@
 /*   By: egiraud <egiraud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 16:07:46 by egiraud           #+#    #+#             */
-/*   Updated: 2025/05/14 16:54:32 by egiraud          ###   ########.fr       */
+/*   Updated: 2025/05/19 21:25:38 by egiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_strlen(char *str)
 	return (i);
 }
 
-void	*ft_calloc(size_t elem, size_t size)
+/*void	*ft_calloc(size_t elem, size_t size)
 {
 	size_t	global_size;
 	void	*tmp;
@@ -41,20 +41,47 @@ void	*ft_calloc(size_t elem, size_t size)
 		ptr++;
 	}
 	return (tmp);
+}*/
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	char	*result;
+	size_t	slen;
+	size_t	i;
+
+	slen = ft_strlen(s);
+	i = 0;
+	if (!s)
+		return (NULL);
+	if (start > slen || len == 0)
+		return (ft_strdup(""));
+	if (len > slen - start)
+		len = slen - start;
+	result = malloc(sizeof(char) * (len + 1));
+	if (!result)
+		return (NULL);
+	while (i < len)
+	{
+		result[i] = s[start + i];
+		i++;
+	}
+	result[i] = 0;
+	return (result);
 }
 
-int	ft_strchr(char *str, char c, int size)
+char	*ft_strchr(char *str, char c)
 {
 	int	i;
 
 	i = 0;
-	while (str[i] && size)
+	while (str[i])
 	{
 		if (str[i] == c)
-			return (i);
+			return (&str[i]);
 		i++;
-		size--;
 	}
+	if (str[i] == c)
+		return (&str[i]);
 	return (0);
 }
 
@@ -78,7 +105,7 @@ char	*ft_strdup(char *str)
 	return (nstr);
 }
 
-char	*ft_strjoin(char *s1, char *s2, int size)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*nstr;
 	int		i;
@@ -88,7 +115,7 @@ char	*ft_strjoin(char *s1, char *s2, int size)
 		return (NULL);
 	i = 0;
 	j = 0;
-	nstr = malloc(sizeof(char) * (ft_strlen(s1) + size + 1));
+	nstr = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!nstr)
 		return (NULL);
 	while (s1[i])
@@ -96,7 +123,7 @@ char	*ft_strjoin(char *s1, char *s2, int size)
 		nstr[i] = s1[i];
 		i++;
 	}
-	while (s2[j] && j < size)
+	while (s2[j])
 		nstr[i++] = s2[j++];
 	nstr[i] = 0;
 	return (nstr);

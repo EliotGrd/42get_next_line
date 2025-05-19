@@ -4,12 +4,15 @@
 
 int main()
 {
+	int	secure = 0;
 	int fd = open("file.txt" , O_RDONLY);
 	char *str = get_next_line(fd);
-	while (str != NULL)
+	printf("%s", str);
+	while (str != NULL && secure < 10)
 	{
 		str = get_next_line(fd);
 		printf("%s", str);
+		secure++;
 	}
 	close(fd);
 }
