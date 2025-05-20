@@ -1,23 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: egiraud <egiraud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 20:05:39 by egiraud           #+#    #+#             */
-/*   Updated: 2025/05/20 18:29:00 by egiraud          ###   ########.fr       */
+/*   Updated: 2025/05/20 19:16:08 by egiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-void	freenull(char *stash)
-{
-	free(stash);
-	stash = NULL;
-	return ;
-}
 
 char	*fill_leftovers(char *stash)
 {
@@ -88,28 +81,28 @@ char	*read_to(int fd, char *stash)
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	*stash;
+	static char	*stash[1024];
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (fd < 0 || fd > 1024 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 	{
-		free(stash);
-		return (stash = NULL, NULL);
+		free(stash[fd]);
+		return (stash[fd] = NULL, NULL);
 	}
-	if (!stash)
+	if (!stash[fd])
 	{
-		stash = ft_strdup("");
-		if (!stash)
+		stash[fd] = ft_strdup("");
+		if (!stash[fd])
 			return (NULL);
 	}
-	stash = read_to(fd, stash);
-	if (!stash)
+	stash[fd] = read_to(fd, stash[fd]);
+	if (!stash[fd])
 		return (NULL);
-	line = lining(stash);
+	line = lining(stash[fd]);
 	if (!line)
 	{
-		free(stash);
-		return (stash = NULL, NULL);
+		free(stash[fd]);
+		return (stash[fd] = NULL, NULL);
 	}
-	stash = fill_leftovers(stash);
+	stash[fd] = fill_leftovers(stash[fd]);
 	return (line);
 }
