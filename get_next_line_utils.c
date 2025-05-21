@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: egiraud <egiraud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 16:07:46 by egiraud           #+#    #+#             */
-/*   Updated: 2025/05/19 21:25:38 by egiraud          ###   ########.fr       */
+/*   Created: 2025/05/21 15:03:31 by egiraud           #+#    #+#             */
+/*   Updated: 2025/05/21 15:15:14 by egiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,27 +21,6 @@ int	ft_strlen(char *str)
 		i++;
 	return (i);
 }
-
-/*void	*ft_calloc(size_t elem, size_t size)
-{
-	size_t			global_size;
-	void			*tmp;
-	unsigned char	*ptr;
-
-	if (size != 0 && elem > (size_t)-1 / size)
-		return (NULL);
-	global_size = elem * size;
-	tmp = malloc(global_size);
-	if (!tmp)
-		return (NULL);
-	ptr = (unsigned char *)tmp;
-	while (global_size--)
-	{
-		*ptr = 0;
-		ptr++;
-	}
-	return (tmp);
-}*/
 
 char	*ft_substr(char *s, unsigned int start, size_t len)
 {

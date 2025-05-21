@@ -6,18 +6,11 @@
 /*   By: egiraud <egiraud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 20:05:39 by egiraud           #+#    #+#             */
-/*   Updated: 2025/05/20 18:29:00 by egiraud          ###   ########.fr       */
+/*   Updated: 2025/05/21 15:11:31 by egiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-void	freenull(char *stash)
-{
-	free(stash);
-	stash = NULL;
-	return ;
-}
 
 char	*fill_leftovers(char *stash)
 {
@@ -65,6 +58,8 @@ char	*read_to(int fd, char *stash)
 	char	*buffer;
 
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buffer)
+		return (NULL);
 	bytes_read = 1;
 	while (bytes_read > 0 && ft_strchr(stash, '\n', BUFFER_SIZE) == 0)
 	{
